@@ -1,0 +1,191 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --size: 187px;
+  --flatness: 187;
+  --scale: 187;
+  --img-scaling: 187;
+  --img-size: 187;
+  --board-top: 187;
+
+  --visibility: hidden;
+  --transition: 0ms;
+  
+  --bound: 0.225708;
+  --boundpc: calc(var(--bound) * 100%);
+
+  --background: #151010;
+  --move-color: #eb18058a;
+  --hover-color: #3c9af270;
+  --select-color: #18d246a7;
+
+  --color-1: #8e592e;
+  --color-2: #d29c44;
+  --color-3: #d9c6b0;
+}
+
+body {
+  height: 100vh;
+  background-color: var(--background);
+  display: grid;
+  position: relative;
+}
+
+#board {
+  position: absolute;
+  top: var(--board-top);
+  left: 50%;
+}
+
+#back-layer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  gap: calc(var(--size) * (1 - 2 * var(--bound)));
+}
+
+[color="1"] {
+  background-color: var(--color-1);
+}
+[color="2"] {
+  background-color: var(--color-2);
+}
+[color="3"] {
+  background-color: var(--color-3);
+}
+
+[possible-move="1"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+[possible-move="1"][capture="0"]::after {
+  background-color: #0005;
+  height: 25%;
+}
+[possible-move="1"][capture="1"]::after {
+  height: 70%;
+  border: 6px solid #0006;
+}
+[possible-move="1"][moved="1"]::after {
+  border: 6px solid #000c !important;
+}
+
+[moved="1"] {
+  background-color: var(--move-color);
+}
+
+[selected="1"] {
+  background-color: var(--select-color);
+}
+
+[grab="1"] {
+  cursor: grab;
+}
+
+[hover="1"][selected="0"][moved="0"] {
+  background-color: var(--hover-color);
+}
+
+[piece="empty"] {
+  background-image: none;
+}
+[piece="wp"] {
+  background-image: url(img/1.png);
+}
+[piece="bp"] {
+  background-image: url(img/-1.png);
+}
+[piece="wn"] {
+  background-image: url(img/2.png);
+}
+[piece="bn"] {
+  background-image: url(img/-2.png);
+}
+[piece="wb"] {
+  background-image: url(img/3.png);
+}
+[piece="bb"] {
+  background-image: url(img/-3.png);
+}
+[piece="wr"] {
+  background-image: url(img/4.png);
+}
+[piece="br"] {
+  background-image: url(img/-4.png);
+}
+[piece="wq"] {
+  background-image: url(img/5.png);
+}
+[piece="bq"] {
+  background-image: url(img/-5.png);
+}
+[piece="wk"] {
+  background-image: url(img/6.png);
+}
+[piece="bk"] {
+  background-image: url(img/-6.png);
+}
+
+#back-layer, #main-layer, #image-layer, #invis-layer {
+  visibility: var(--visibility);
+}
+
+#back-layer .cell {
+  position: relative !important;
+  z-index: 10;
+}
+#main-layer .cell {
+  z-index: 20;
+}
+#image-layer .image {
+  z-index: 30;
+}
+.floating {
+  z-index: 40 !important;
+}
+#invis-layer .cell {
+  z-index: 50;
+}
+
+.cell {
+  position: absolute;
+  width: var(--size);
+  height: calc(var(--size) / var(--flatness));
+  transform-origin: center center;
+
+  clip-path: polygon(
+    var(--boundpc) 0%,
+    calc(100% - var(--boundpc)) 0%,
+    100% 50%,
+    calc(100% - var(--boundpc)) 100%,
+    var(--boundpc) 100%,
+    0% 50%
+  );
+}
+.scale {
+  scale: var(--scale);
+}
+
+.image {
+  position: absolute;
+  width: var(--img-size);
+  aspect-ratio: 1;
+  background-size: cover;
+  transition: transform var(--transition);
+}
